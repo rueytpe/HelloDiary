@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/view_all_menu"
+        android:icon="@drawable/ic_view_all"
+        android:title="View All Diaries"
+        android:tooltipText="View All Diaries"
+        app:showAsAction="never" />
+
+    <item
+        android:title="Settings"
+        android:id="@+id/settings_menu"
+        android:icon="@drawable/ic_settings"
+        app:showAsAction="never"
+        android:tooltipText="Setting"
+        />
+
+</menu>

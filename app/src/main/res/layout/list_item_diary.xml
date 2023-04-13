@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/parent"
+    app:cardCornerRadius="7dp"
+    app:cardElevation="7dp"
+    android:layout_margin="5dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/diaryInfoLayout"
+            >
+            <TextView
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:text="Name:"
+                android:id="@+id/lblName" />
+            <TextView
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:text="John Doe"
+                android:id="@+id/txtName"
+                android:layout_toRightOf="@id/lblName"
+                android:layout_marginLeft="8dp"/>
+            <TextView
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:text="Date:"
+                android:id="@+id/lblDate"
+                android:layout_below="@id/lblName"/>
+            <TextView
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:text="2020-01-01"
+                android:id="@+id/txtDate"
+                android:layout_toRightOf="@id/lblDate"
+                android:layout_below="@id/txtName"/>
+            <TextView
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:text="Weather:"
+                android:id="@+id/lblWeather"
+                android:layout_below="@id/lblDate"/>
+            <TextView
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:text="Sunny"
+                android:id="@+id/txtWeather"
+                android:layout_toRightOf="@id/lblWeather"
+                android:layout_below="@id/txtDate"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/txtWeather"
+                android:text="Today"
+                android:textStyle="bold"
+                android:visibility="gone"
+                android:textColor="@color/teal_200"
+                android:id="@+id/txtToday" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/txtWeather"
+                android:src="@drawable/ic_down_arrow"
+                android:layout_marginTop="7dp"
+                android:id="@+id/btnDownArrow"
+                android:layout_alignParentEnd="true"
+                />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/expandedDiaryLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:layout_below="@id/diaryInfoLayout">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/txtContent"
+                android:text="I will try not to waste my life today."
+                />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_up_arrow"
+                android:layout_below="@id/txtContent"
+                android:layout_alignParentEnd="true"
+                android:id="@+id/btnUpArrow" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Delete"
+                android:layout_below="@id/txtContent"
+                android:layout_toStartOf="@id/btnUpArrow"
+                android:layout_marginEnd="7dp"
+                android:id="@+id/btnDelete"
+                android:textColor="@color/pink"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Edit"
+                android:layout_below="@id/txtContent"
+                android:layout_toStartOf="@id/btnDelete"
+                android:layout_marginEnd="7dp"
+                android:id="@+id/btnEdit"
+                android:textColor="@color/teal_200"/>
+
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+</com.google.android.material.card.MaterialCardView>
+
+
