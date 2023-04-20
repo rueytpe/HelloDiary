@@ -24,7 +24,15 @@ import com.clu.hello.diary.util.Utils;
 import java.util.List;
 
 /**
- * 11:37
+ * Server: Pixel 6 Pro API 33
+ *
+ * 1) I will need to start deploying to Android Play Store
+ *
+ * 2) I will need to design the home page
+ *
+ * 3) I will need to create an icon for it
+ *
+ * 4) I need to be good with Gimp
  */
 public class MainActivity extends AppCompatActivity {
 
