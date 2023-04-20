@@ -33,6 +33,8 @@ import java.util.List;
  * 3) I will need to create an icon for it
  *
  * 4) I need to be good with Gimp
+ *
+ * 5) Fix the special character which broke the SQL
  */
 public class MainActivity extends AppCompatActivity {
 
