@@ -3,6 +3,7 @@ package com.clu.hello.diary.db;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
@@ -85,8 +86,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         // find customerModel in the database, if it found, delete it and return true.
         // if it is not found, return false
 
+        String eFullName = DatabaseUtils.sqlEscapeString(fullName);
+        String eWeather = DatabaseUtils.sqlEscapeString(weather);
+        String eNotes = DatabaseUtils.sqlEscapeString(notes);
         SQLiteDatabase db = this.getWritableDatabase();
-        String queryString = "UPDATE " + DIARY_TABLE + " SET " + COLUMN_FULL_NAME + " = \'" + fullName + "\', " + COLUMN_WEATHER + " = \'" + weather + "\', " + COLUMN_DIARY_CONTENT  +"= \'" + notes + "\'" + " WHERE " + COLUMN_ID + " = " + diaryId;
+        String queryString = "UPDATE " + DIARY_TABLE + " SET " + COLUMN_FULL_NAME + " = " + eFullName + ", " + COLUMN_WEATHER + " = " + eWeather + ", " + COLUMN_DIARY_CONTENT  +"= " + eNotes +  " WHERE " + COLUMN_ID + " = " + diaryId;
 
         Cursor cursor = db.rawQuery(queryString, null);
 
@@ -102,8 +106,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         // find customerModel in the database, if it found, delete it and return true.
         // if it is not found, return false
 
+        String eWeather = DatabaseUtils.sqlEscapeString(weather);
+        String eNotes = DatabaseUtils.sqlEscapeString(notes);
         SQLiteDatabase db = this.getWritableDatabase();
-        String queryString = "UPDATE " + DIARY_TABLE + " SET " + COLUMN_WEATHER + " = \'" + weather + "\', " + COLUMN_DIARY_CONTENT  +"= \'" + notes + "\'" + " WHERE " + COLUMN_ID + " = " + diaryId;
+        String queryString = "UPDATE " + DIARY_TABLE + " SET " + COLUMN_WEATHER + " = " + eWeather + ", " + COLUMN_DIARY_CONTENT  +"= " + eNotes +  " WHERE " + COLUMN_ID + " = " + diaryId;
 
         Cursor cursor = db.rawQuery(queryString, null);
 
