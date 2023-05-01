@@ -24,7 +24,6 @@ public class ViewAllActivity extends AppCompatActivity {
     private RecyclerView diariesRecView;
     private DiaryRecViewAdapter adapter;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,6 +36,30 @@ public class ViewAllActivity extends AppCompatActivity {
         diariesRecView = findViewById(R.id.diariesRecView);
         diariesRecView.setAdapter(adapter);
         diariesRecView.setLayoutManager(new LinearLayoutManager(this));
+        this.updateDiaries();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                break;
+            default:
+                break;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        this.updateDiaries();
+
+    }
+
+    private void updateDiaries() {
         DatabaseHelper databaseHelper = new DatabaseHelper(ViewAllActivity.this);
         List<DiaryModel> allDiaryRecords= databaseHelper.getEveryOne();
         ArrayList<Diary> allDiaries = new ArrayList<>();
@@ -53,18 +76,6 @@ public class ViewAllActivity extends AppCompatActivity {
         }
 
         adapter.setDiaries(allDiaries);
-    }
 
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                onBackPressed();
-                break;
-            default:
-                break;
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 }

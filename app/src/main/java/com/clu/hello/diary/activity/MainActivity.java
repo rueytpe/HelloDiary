@@ -26,15 +26,12 @@ import java.util.List;
 /**
  * Server: Pixel 6 Pro API 33
  *
- * 1) I will need to start deploying to Android Play Store
+ * 1) Deploying to Android Play Store
  *
- * 2) I will need to design the home page
+ * 2) Design the home page
  *
- * 3) I will need to create an icon for it
+ * 3) Create daily, weekly, monthly, and yearly page
  *
- * 4) I need to be good with Gimp
- *
- * 5) Fix the special character which broke the SQL
  */
 public class MainActivity extends AppCompatActivity {
 

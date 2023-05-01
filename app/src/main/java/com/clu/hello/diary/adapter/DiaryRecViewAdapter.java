@@ -50,6 +50,7 @@ public class DiaryRecViewAdapter extends RecyclerView.Adapter<DiaryRecViewAdapte
 
     public void setDiaries(ArrayList<Diary> diaries) {
         this.diaries = diaries;
+        notifyDataSetChanged();
     }
 
     public ArrayList<Diary> getDiaries() {

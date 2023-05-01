@@ -81,6 +81,7 @@ public class EditActivity extends AppCompatActivity {
         List<DiaryModel> diaries = databaseHelper.findRecsByDate(Utils.getTodayStrforDatabase());
         boolean success = databaseHelper.updateOne(diaryModel.getId(), editTextWeather.getText().toString(), editTxtNote.getText().toString());
         Toast.makeText(this, "Diary " + diaryModel.getDiaryDate() + " has been successfully updated", Toast.LENGTH_SHORT).show();
+
         return;
 
 
