@@ -3,6 +3,8 @@ package com.clu.hello.diary.activity;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.preference.PreferenceManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -16,11 +18,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.clu.hello.diary.R;
+import com.clu.hello.diary.adapter.DiaryRecViewAdapter;
 import com.clu.hello.diary.databinding.ActivityMainBinding;
 import com.clu.hello.diary.db.DatabaseHelper;
 import com.clu.hello.diary.model.DiaryModel;
 import com.clu.hello.diary.util.Utils;
+import com.clu.hello.diary.vo.Diary;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -30,77 +35,46 @@ import java.util.List;
  *
  * 2) Design the home page
  *
- * 3) Create daily, weekly, monthly, and yearly page
+ * 3) Create Add button on Home Page
+ *
+ * 4) Create daily, weekly, monthly, and yearly page
  *
  */
 public class MainActivity extends AppCompatActivity {
 
     private String signature;
 
+    private RecyclerView diariesRecView;
+    private DiaryRecViewAdapter adapter;
+
     private ActivityMainBinding binding;
-    private EditText editTxtNote;
+//    private EditText editTxtNote;
     private DatabaseHelper databaseHelper;
-    private DiaryModel todayDiaryModel;
-    private TextView txtDate;
-    private EditText editTextWeather;
+//    private DiaryModel todayDiaryModel;
+//    private TextView txtDate;
+//    private EditText editTextWeather;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
-   //     setContentView(R.layout.activity_main);
+
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
 
         signature = prefs.getString("signature", "");
         this.setTitle("Hello " + signature);
         setContentView(binding.getRoot());
 
-        mySettings();
-    }
-
-    private void mySettings() {
-
-        databaseHelper = new DatabaseHelper(this);
-
-        List<DiaryModel> diaryModels = databaseHelper.findRecsByDate(Utils.getTodayStrforDatabase());
-        editTxtNote = findViewById(R.id.edtTxtNote);
-        editTextWeather = findViewById(R.id.edtTxtWeather);
-        if (diaryModels != null && diaryModels.size() > 0) {
-            this.todayDiaryModel = diaryModels.get(0);
-            editTxtNote.setText(todayDiaryModel.getDiaryContent());
-            editTextWeather.setText(todayDiaryModel.getDiaryWeather());
-        }
-
-        txtDate = findViewById(R.id.txtDate);
-        txtDate.setText(Utils.getTodayStrforView());
-
-        Toast.makeText(this, "signature = " + signature, Toast.LENGTH_SHORT).show();
+        adapter = new DiaryRecViewAdapter(this, "allDiaries");
+        diariesRecView = findViewById(R.id.diariesRecView);
+        diariesRecView.setAdapter(adapter);
+        diariesRecView.setLayoutManager(new LinearLayoutManager(this));
+        this.updateDiaries();
 
     }
 
-    public void onBtnHelloClick(View view) {
 
-        DiaryModel diaryModel = new DiaryModel();
-
-        diaryModel.setDiaryDate(Utils.getTodayStrforDatabase());
-        diaryModel.setFullName(signature);
-        diaryModel.setDiaryWeather(editTextWeather.getText().toString());
-        diaryModel.setDiaryContent(editTxtNote.getText().toString());
-
-        List<DiaryModel> diaries = databaseHelper.findRecsByDate(Utils.getTodayStrforDatabase());
-
-        if (todayDiaryModel != null) {
-            boolean success = databaseHelper.updateOne(todayDiaryModel.getId(), signature, editTextWeather.getText().toString(), editTxtNote.getText().toString());
-            Toast.makeText(this, "Today's Diary is has been successfully updated", Toast.LENGTH_SHORT).show();
-            return;
-        } else {
-            boolean success = databaseHelper.addOne(diaryModel);
-            Toast.makeText(this, "Today's Diary has been successfully created", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -140,6 +114,27 @@ public class MainActivity extends AppCompatActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
+
+    }
+
+
+    private void updateDiaries() {
+        DatabaseHelper databaseHelper = new DatabaseHelper(MainActivity.this);
+        List<DiaryModel> allDiaryRecords= databaseHelper.getEveryOne();
+        ArrayList<Diary> allDiaries = new ArrayList<>();
+        for (int i=0; i<= allDiaryRecords.size() - 1; i++) {
+            DiaryModel rec = allDiaryRecords.get(i);
+            Diary diary = new Diary();
+            diary.setId(rec.getId());
+            String dateStr = Utils.changeDateFormat(rec.getDiaryDate(), Utils.DB_DATE_FORMAT, Utils.DISPLAY_DATE_FORMAT);
+            diary.setDiaryDate(dateStr);
+            diary.setDiaryWeather(rec.getDiaryWeather());
+            diary.setFullName(rec.getFullName());
+            diary.setDiaryContent(rec.getDiaryContent());
+            allDiaries.add(diary);
+        }
+
+        adapter.setDiaries(allDiaries);
 
     }
 

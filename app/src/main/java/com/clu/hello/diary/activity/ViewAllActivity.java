@@ -6,7 +6,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import com.clu.hello.diary.adapter.DiaryRecViewAdapter;
@@ -77,5 +80,30 @@ public class ViewAllActivity extends AppCompatActivity {
 
         adapter.setDiaries(allDiaries);
 
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.main_menu, menu);
+        MenuItem setting = menu.findItem(R.id.settings_menu);
+        setting.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                Intent intent = new Intent(ViewAllActivity.this, SettingsActivity.class);
+                startActivity(intent);
+                return false;
+            }
+        });
+
+        MenuItem viewAll = menu.findItem(R.id.view_all_menu);
+        viewAll.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem menuItem) {
+                Intent intent = new Intent(ViewAllActivity.this, ViewAllActivity.class);
+                startActivity(intent);
+                return false;
+            }
+        });
+        return true;
     }
 }
