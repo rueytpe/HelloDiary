@@ -21,11 +21,14 @@ import java.util.List;
 
 public class EditActivity extends AppCompatActivity {
 
-    private static final String DIARY_ID_KEY = "id";
-    private EditText editTextWeather;
-    private EditText editTxtNote;
+    public static final String DIARY_ID_KEY = "id";
+    public static final String SIGNATURE_KEY = "signature";
+    private EditText edtTxtWeather;
+    private EditText edtTxtNote;
     private TextView txtDate;
-    DiaryModel diaryModel;
+    private int diaryId;
+    private String signature;
+ //   private DiaryModel diaryModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,19 +41,24 @@ public class EditActivity extends AppCompatActivity {
         }
 
         Intent intent = getIntent();
+        txtDate = findViewById(R.id.txtDate);
         if (null != intent) {
+            diaryId = intent.getIntExtra(DIARY_ID_KEY, -1);
 
-            int diaryId = intent.getIntExtra(DIARY_ID_KEY, -1);
+            signature = intent.getStringExtra(SIGNATURE_KEY);
             if (diaryId != -1) {
                 DatabaseHelper databaseHelper = new DatabaseHelper(EditActivity.this);
-
-                diaryModel = databaseHelper.findRecById(String.valueOf(diaryId));
-                editTxtNote = findViewById(R.id.edtTxtNote);
-                editTextWeather = findViewById(R.id.edtTxtWeather);
-                txtDate = findViewById(R.id.txtDate);
+                DiaryModel diaryModel = databaseHelper.findRecById(String.valueOf(diaryId));
+                edtTxtNote = findViewById(R.id.edtTxtNote);
+                edtTxtWeather = findViewById(R.id.edtTxtWeather);
                 txtDate.setText(Utils.changeDateFormat(diaryModel.getDiaryDate(), Utils.DB_DATE_FORMAT, Utils.DISPLAY_DATE_FORMAT));
-                editTxtNote.setText(diaryModel.getDiaryContent());
-                editTextWeather.setText(diaryModel.getDiaryWeather());
+                edtTxtNote.setText(diaryModel.getDiaryContent());
+                edtTxtWeather.setText(diaryModel.getDiaryWeather());
+                diaryId = diaryModel.getId();
+
+            } else {
+                this.setTitle("Add a daily entry");
+                txtDate.setText(Utils.getTodayStrforDatabase());
 
             }
 
@@ -74,13 +82,28 @@ public class EditActivity extends AppCompatActivity {
 
     public void onBtnUpdateClick(View view) {
 
-        diaryModel.setDiaryWeather(editTextWeather.getText().toString());
-        diaryModel.setDiaryContent(editTxtNote.getText().toString());
+        edtTxtWeather = findViewById(R.id.edtTxtWeather);
+        edtTxtNote = findViewById(R.id.edtTxtNote);
+//        diaryModel.setDiaryWeather(editTextWeather.getText().toString());
+//        diaryModel.setDiaryContent(editTxtNote.getText().toString());
 
         DatabaseHelper databaseHelper = new DatabaseHelper(EditActivity.this);
-        List<DiaryModel> diaries = databaseHelper.findRecsByDate(Utils.getTodayStrforDatabase());
-        boolean success = databaseHelper.updateOne(diaryModel.getId(), editTextWeather.getText().toString(), editTxtNote.getText().toString());
-        Toast.makeText(this, "Diary " + diaryModel.getDiaryDate() + " has been successfully updated", Toast.LENGTH_SHORT).show();
+//        List<DiaryModel> diaries = databaseHelper.findRecsByDate(Utils.getTodayStrforDatabase());
+        if (diaryId != -1) {
+            boolean success = databaseHelper.updateOne(diaryId, edtTxtWeather.getText().toString(), edtTxtNote.getText().toString());
+            Toast.makeText(this, "Diary has been successfully updated", Toast.LENGTH_SHORT).show();
+        } else {
+            DiaryModel diaryModel = new DiaryModel();
+
+            diaryModel.setDiaryDate(Utils.getTodayStrforDatabase());
+            diaryModel.setFullName(signature);
+            diaryModel.setDiaryWeather(edtTxtWeather.getText().toString());
+            diaryModel.setDiaryContent(edtTxtNote.getText().toString());
+
+            boolean success = databaseHelper.addOne(diaryModel);
+            Toast.makeText(this, "Today's Diary has been successfully created", Toast.LENGTH_SHORT).show();
+
+        }
 
         return;
 

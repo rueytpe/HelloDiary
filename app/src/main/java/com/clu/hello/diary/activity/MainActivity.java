@@ -48,11 +48,7 @@ public class MainActivity extends AppCompatActivity {
     private DiaryRecViewAdapter adapter;
 
     private ActivityMainBinding binding;
-//    private EditText editTxtNote;
     private DatabaseHelper databaseHelper;
-//    private DiaryModel todayDiaryModel;
-//    private TextView txtDate;
-//    private EditText editTextWeather;
 
 
     @Override
@@ -111,6 +107,10 @@ public class MainActivity extends AppCompatActivity {
             case R.id.view_all_menu:
                 Toast.makeText(this, "View All selected", Toast.LENGTH_SHORT).show();
                 return true;
+            case R.id.add_menu:
+                Intent intent = new Intent(this, EditActivity.class);
+                intent.putExtra(EditActivity.SIGNATURE_KEY, signature);
+                this.startActivity(intent);
             default:
                 return super.onOptionsItemSelected(item);
         }

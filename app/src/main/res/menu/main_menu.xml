@@ -17,4 +17,12 @@
         android:tooltipText="Setting"
         />
 
+    <item
+        android:title="Add"
+        android:id="@+id/add_menu"
+        android:icon="@drawable/ic_add_white"
+        app:showAsAction="ifRoom"
+        android:tooltipText="Add"
+        />
+
 </menu>
