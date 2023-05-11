@@ -105,7 +105,10 @@ public class EditActivity extends AppCompatActivity {
 
         }
 
+        Intent intent = new Intent(EditActivity.this, MainActivity.class);
+        startActivity(intent);
         return;
+
 
 
     }
