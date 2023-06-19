@@ -22,6 +22,10 @@ import com.clu.hello.diary.vo.Diary;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * This class is no longer used
+ * @deprecated
+ */
 public class ViewAllActivity extends AppCompatActivity {
 
     private RecyclerView diariesRecView;
@@ -95,15 +99,15 @@ public class ViewAllActivity extends AppCompatActivity {
             }
         });
 
-        MenuItem viewAll = menu.findItem(R.id.view_all_menu);
-        viewAll.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem menuItem) {
-                Intent intent = new Intent(ViewAllActivity.this, ViewAllActivity.class);
-                startActivity(intent);
-                return false;
-            }
-        });
+//        MenuItem viewAll = menu.findItem(R.id.view_all_menu);
+//        viewAll.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+//            @Override
+//            public boolean onMenuItemClick(MenuItem menuItem) {
+//                Intent intent = new Intent(ViewAllActivity.this, ViewAllActivity.class);
+//                startActivity(intent);
+//                return false;
+//            }
+//        });
         return true;
     }
 }

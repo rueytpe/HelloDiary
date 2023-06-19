@@ -13,7 +13,10 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -50,7 +53,6 @@ public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding binding;
     private DatabaseHelper databaseHelper;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,16 +63,45 @@ public class MainActivity extends AppCompatActivity {
         signature = prefs.getString("signature", "");
         this.setTitle("Hello " + signature);
         setContentView(binding.getRoot());
+        //////////////
 
         adapter = new DiaryRecViewAdapter(this, "allDiaries");
         diariesRecView = findViewById(R.id.diariesRecView);
         diariesRecView.setAdapter(adapter);
         diariesRecView.setLayoutManager(new LinearLayoutManager(this));
-        this.updateDiaries();
+
+        //////////////
+
+        Spinner spinner = findViewById(R.id.filterDropdown);
+
+        String[] items = Utils.getDiaryFilterItems();
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, items);
+
+        arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+
+        arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(arrayAdapter);
+        spinner.setSelection(0);
+
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String selectedItem = parent.getItemAtPosition(position).toString();
+
+                Toast.makeText(MainActivity.this, "SelectedItem = " + selectedItem, Toast.LENGTH_SHORT).show();
+                // Do something with the selected item
+
+                updateDiaries(selectedItem);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                // Handle the case when nothing is selected
+            }
+        });
 
     }
-
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -86,15 +117,15 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        MenuItem viewAll = menu.findItem(R.id.view_all_menu);
-        viewAll.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem menuItem) {
-                Intent intent = new Intent(MainActivity.this, ViewAllActivity.class);
-                startActivity(intent);
-                return false;
-            }
-        });
+//        MenuItem viewAll = menu.findItem(R.id.view_all_menu);
+//        viewAll.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+//            @Override
+//            public boolean onMenuItemClick(MenuItem menuItem) {
+//                Intent intent = new Intent(MainActivity.this, ViewAllActivity.class);
+//                startActivity(intent);
+//                return false;
+//            }
+//        });
         return true;
     }
 
@@ -104,9 +135,9 @@ public class MainActivity extends AppCompatActivity {
             case R.id.settings_menu:
                 Toast.makeText(this, "Setting selected", Toast.LENGTH_SHORT).show();
                 return true;
-            case R.id.view_all_menu:
-                Toast.makeText(this, "View All selected", Toast.LENGTH_SHORT).show();
-                return true;
+//            case R.id.view_all_menu:
+//                Toast.makeText(this, "View All selected", Toast.LENGTH_SHORT).show();
+//                return true;
             case R.id.add_menu:
                 Intent intent = new Intent(this, EditActivity.class);
                 intent.putExtra(EditActivity.SIGNATURE_KEY, signature);
@@ -118,7 +149,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    private void updateDiaries() {
+    final void updateDiaries(String criteria) {
         DatabaseHelper databaseHelper = new DatabaseHelper(MainActivity.this);
         List<DiaryModel> allDiaryRecords= databaseHelper.getEveryOne();
         ArrayList<Diary> allDiaries = new ArrayList<>();
@@ -126,6 +157,9 @@ public class MainActivity extends AppCompatActivity {
             DiaryModel rec = allDiaryRecords.get(i);
             Diary diary = new Diary();
             diary.setId(rec.getId());
+            if (rec.getDiaryDate().indexOf(criteria) < 0) {
+                continue;
+            }
             String dateStr = Utils.changeDateFormat(rec.getDiaryDate(), Utils.DB_DATE_FORMAT, Utils.DISPLAY_DATE_FORMAT);
             diary.setDiaryDate(dateStr);
             diary.setDiaryWeather(rec.getDiaryWeather());
