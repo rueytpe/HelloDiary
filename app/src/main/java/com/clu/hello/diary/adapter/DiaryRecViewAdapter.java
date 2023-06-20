@@ -1,6 +1,5 @@
 package com.clu.hello.diary.adapter;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
@@ -19,8 +18,6 @@ import androidx.transition.TransitionManager;
 
 import com.clu.hello.diary.R;
 import com.clu.hello.diary.activity.EditActivity;
-import com.clu.hello.diary.activity.MainActivity;
-import com.clu.hello.diary.activity.ViewAllActivity;
 import com.clu.hello.diary.db.DatabaseHelper;
 import com.clu.hello.diary.util.Utils;
 import com.clu.hello.diary.vo.Diary;
