@@ -36,11 +36,7 @@ import java.util.List;
  *
  * 1) Deploying to Android Play Store
  *
- * 2) Design the home page
- *
- * 3) Create Add button on Home Page
- *
- * 4) Create daily, weekly, monthly, and yearly page
+ * 2) use DatePicker to select date
  *
  */
 public class MainActivity extends AppCompatActivity {
@@ -52,6 +48,8 @@ public class MainActivity extends AppCompatActivity {
 
     private ActivityMainBinding binding;
     private DatabaseHelper databaseHelper;
+
+    private EditText dateEditText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

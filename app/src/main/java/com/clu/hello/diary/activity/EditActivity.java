@@ -4,10 +4,13 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -17,6 +20,9 @@ import com.clu.hello.diary.db.DatabaseHelper;
 import com.clu.hello.diary.model.DiaryModel;
 import com.clu.hello.diary.util.Utils;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.List;
 
 public class EditActivity extends AppCompatActivity {
@@ -25,10 +31,9 @@ public class EditActivity extends AppCompatActivity {
     public static final String SIGNATURE_KEY = "signature";
     private EditText edtTxtWeather;
     private EditText edtTxtNote;
-    private TextView txtDate;
+    private EditText edtTxtDate;
     private int diaryId;
     private String signature;
- //   private DiaryModel diaryModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,7 +46,7 @@ public class EditActivity extends AppCompatActivity {
         }
 
         Intent intent = getIntent();
-        txtDate = findViewById(R.id.txtDate);
+        edtTxtDate = findViewById(R.id.edtTxtDate);
         if (null != intent) {
             diaryId = intent.getIntExtra(DIARY_ID_KEY, -1);
 
@@ -51,18 +56,26 @@ public class EditActivity extends AppCompatActivity {
                 DiaryModel diaryModel = databaseHelper.findRecById(String.valueOf(diaryId));
                 edtTxtNote = findViewById(R.id.edtTxtNote);
                 edtTxtWeather = findViewById(R.id.edtTxtWeather);
-                txtDate.setText(Utils.changeDateFormat(diaryModel.getDiaryDate(), Utils.DB_DATE_FORMAT, Utils.DISPLAY_DATE_FORMAT));
+                edtTxtDate.setText(Utils.changeDateFormat(diaryModel.getDiaryDate(), Utils.DB_DATE_FORMAT, Utils.DISPLAY_DATE_FORMAT));
                 edtTxtNote.setText(diaryModel.getDiaryContent());
                 edtTxtWeather.setText(diaryModel.getDiaryWeather());
                 diaryId = diaryModel.getId();
 
             } else {
                 this.setTitle("Add a daily entry");
-                txtDate.setText(Utils.getTodayStrforDatabase());
+                edtTxtDate.setText(Utils.getTodayStrforDatabase());
 
             }
 
         }
+
+        edtTxtDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                edtTxtDate.setText("");
+                showDatePickerDialog();
+            }
+        });
     }
 
 
@@ -84,8 +97,11 @@ public class EditActivity extends AppCompatActivity {
 
         edtTxtWeather = findViewById(R.id.edtTxtWeather);
         edtTxtNote = findViewById(R.id.edtTxtNote);
-//        diaryModel.setDiaryWeather(editTextWeather.getText().toString());
-//        diaryModel.setDiaryContent(editTxtNote.getText().toString());
+        edtTxtDate = findViewById(R.id.edtTxtDate);
+
+        if (!validateInput(edtTxtDate.getText().toString())) {
+            return;
+        }
 
         DatabaseHelper databaseHelper = new DatabaseHelper(EditActivity.this);
 //        List<DiaryModel> diaries = databaseHelper.findRecsByDate(Utils.getTodayStrforDatabase());
@@ -108,8 +124,46 @@ public class EditActivity extends AppCompatActivity {
         Intent intent = new Intent(EditActivity.this, MainActivity.class);
         startActivity(intent);
         return;
+    }
+
+    public boolean validateInput(String dateStr) {
 
 
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        dateFormat.setLenient(false);
+        try {
+            dateFormat.parse(dateStr);
 
+        } catch (ParseException e) {
+            Toast.makeText(this, "The date format should be yyyy-MM-dd", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        return true;
+    }
+
+    private void showDatePickerDialog() {
+        // Get current date
+        Calendar calendar = Calendar.getInstance();
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH);
+        int dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
+
+        // Create DatePickerDialog
+        DatePickerDialog datePickerDialog = new DatePickerDialog(
+                this,
+                new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                        // Update the EditText with the selected date
+                        edtTxtDate.setText(Utils.createDateByDbFormat(year, month + 1, dayOfMonth));
+                    }
+                },
+                year,
+                month,
+                dayOfMonth
+        );
+
+        // Show the dialog
+        datePickerDialog.show();
     }
 }

@@ -53,4 +53,11 @@ public class Utils {
 
         return result;
     }
+
+    public static String createDateByDbFormat(int year, int month, int date) {
+        String strMonth = String.format("%02d", month);
+        String strDate = String.format("%02d", date);
+        return year + "-" + strMonth + "-" + strDate;
+
+    }
 }
