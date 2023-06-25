@@ -14,7 +14,7 @@ import com.clu.hello.diary.model.DiaryModel;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DatabaseHelper extends SQLiteOpenHelper {
+public class DiaryDbHelper extends SQLiteOpenHelper {
 
     public static final String DIARY_TABLE = "DIARY_TABLE";
     public static final String COLUMN_WEATHER = "DIARY_WEATHER";
@@ -23,7 +23,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String COLUMN_DIARY_CONTENT = "DIARY_CONTENT";
     public static final String COLUMN_ID = "ID";
 
-    public DatabaseHelper(@Nullable Context context) {
+    public DiaryDbHelper(@Nullable Context context) {
         super(context, "diary.db", null, 1);
     }
 

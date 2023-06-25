@@ -17,13 +17,12 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.clu.hello.diary.R;
 import com.clu.hello.diary.adapter.DiaryRecViewAdapter;
 import com.clu.hello.diary.databinding.ActivityMainBinding;
-import com.clu.hello.diary.db.DatabaseHelper;
+import com.clu.hello.diary.db.DiaryDbHelper;
 import com.clu.hello.diary.model.DiaryModel;
 import com.clu.hello.diary.util.Utils;
 import com.clu.hello.diary.vo.Diary;
@@ -47,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
     private DiaryRecViewAdapter adapter;
 
     private ActivityMainBinding binding;
-    private DatabaseHelper databaseHelper;
+    private DiaryDbHelper databaseHelper;
 
     private EditText dateEditText;
 
@@ -137,7 +136,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     final void updateDiaries(String criteria) {
-        DatabaseHelper databaseHelper = new DatabaseHelper(MainActivity.this);
+        DiaryDbHelper databaseHelper = new DiaryDbHelper(MainActivity.this);
         List<DiaryModel> allDiaryRecords= databaseHelper.getEveryOne();
         ArrayList<Diary> allDiaries = new ArrayList<>();
         for (int i=0; i<= allDiaryRecords.size() - 1; i++) {

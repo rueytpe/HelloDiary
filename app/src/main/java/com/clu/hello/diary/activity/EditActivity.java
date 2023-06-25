@@ -8,22 +8,19 @@ import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.clu.hello.diary.R;
-import com.clu.hello.diary.db.DatabaseHelper;
+import com.clu.hello.diary.db.DiaryDbHelper;
 import com.clu.hello.diary.model.DiaryModel;
 import com.clu.hello.diary.util.Utils;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.List;
 
 public class EditActivity extends AppCompatActivity {
 
@@ -52,7 +49,7 @@ public class EditActivity extends AppCompatActivity {
 
             signature = intent.getStringExtra(SIGNATURE_KEY);
             if (diaryId != -1) {
-                DatabaseHelper databaseHelper = new DatabaseHelper(EditActivity.this);
+                DiaryDbHelper databaseHelper = new DiaryDbHelper(EditActivity.this);
                 DiaryModel diaryModel = databaseHelper.findRecById(String.valueOf(diaryId));
                 edtTxtNote = findViewById(R.id.edtTxtNote);
                 edtTxtWeather = findViewById(R.id.edtTxtWeather);
@@ -103,10 +100,10 @@ public class EditActivity extends AppCompatActivity {
             return;
         }
 
-        DatabaseHelper databaseHelper = new DatabaseHelper(EditActivity.this);
-//        List<DiaryModel> diaries = databaseHelper.findRecsByDate(Utils.getTodayStrforDatabase());
+        DiaryDbHelper diaryDbHelper = new DiaryDbHelper(EditActivity.this);
+//        List<DiaryModel> diaries = diaryDbHelper.findRecsByDate(Utils.getTodayStrforDatabase());
         if (diaryId != -1) {
-            boolean success = databaseHelper.updateOne(diaryId, edtTxtWeather.getText().toString(), edtTxtNote.getText().toString());
+            boolean success = diaryDbHelper.updateOne(diaryId, edtTxtWeather.getText().toString(), edtTxtNote.getText().toString());
             Toast.makeText(this, "Diary has been successfully updated", Toast.LENGTH_SHORT).show();
         } else {
             DiaryModel diaryModel = new DiaryModel();
@@ -116,7 +113,7 @@ public class EditActivity extends AppCompatActivity {
             diaryModel.setDiaryWeather(edtTxtWeather.getText().toString());
             diaryModel.setDiaryContent(edtTxtNote.getText().toString());
 
-            boolean success = databaseHelper.addOne(diaryModel);
+            boolean success = diaryDbHelper.addOne(diaryModel);
             Toast.makeText(this, "Today's Diary has been successfully created", Toast.LENGTH_SHORT).show();
 
         }
