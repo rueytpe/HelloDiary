@@ -3,6 +3,7 @@ package com.clu.hello.diary.db;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
@@ -13,7 +14,7 @@ import com.clu.hello.diary.model.DiaryModel;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DatabaseHelper extends SQLiteOpenHelper {
+public class DiaryDbHelper extends SQLiteOpenHelper {
 
     public static final String DIARY_TABLE = "DIARY_TABLE";
     public static final String COLUMN_WEATHER = "DIARY_WEATHER";
@@ -22,7 +23,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String COLUMN_DIARY_CONTENT = "DIARY_CONTENT";
     public static final String COLUMN_ID = "ID";
 
-    public DatabaseHelper(@Nullable Context context) {
+    public DiaryDbHelper(@Nullable Context context) {
         super(context, "diary.db", null, 1);
     }
 
@@ -85,8 +86,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         // find customerModel in the database, if it found, delete it and return true.
         // if it is not found, return false
 
+        String eFullName = DatabaseUtils.sqlEscapeString(fullName);
+        String eWeather = DatabaseUtils.sqlEscapeString(weather);
+        String eNotes = DatabaseUtils.sqlEscapeString(notes);
         SQLiteDatabase db = this.getWritableDatabase();
-        String queryString = "UPDATE " + DIARY_TABLE + " SET " + COLUMN_FULL_NAME + " = \'" + fullName + "\', " + COLUMN_WEATHER + " = \'" + weather + "\', " + COLUMN_DIARY_CONTENT  +"= \'" + notes + "\'" + " WHERE " + COLUMN_ID + " = " + diaryId;
+        String queryString = "UPDATE " + DIARY_TABLE + " SET " + COLUMN_FULL_NAME + " = " + eFullName + ", " + COLUMN_WEATHER + " = " + eWeather + ", " + COLUMN_DIARY_CONTENT  +"= " + eNotes +  " WHERE " + COLUMN_ID + " = " + diaryId;
 
         Cursor cursor = db.rawQuery(queryString, null);
 
@@ -102,8 +106,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         // find customerModel in the database, if it found, delete it and return true.
         // if it is not found, return false
 
+        String eWeather = DatabaseUtils.sqlEscapeString(weather);
+        String eNotes = DatabaseUtils.sqlEscapeString(notes);
         SQLiteDatabase db = this.getWritableDatabase();
-        String queryString = "UPDATE " + DIARY_TABLE + " SET " + COLUMN_WEATHER + " = \'" + weather + "\', " + COLUMN_DIARY_CONTENT  +"= \'" + notes + "\'" + " WHERE " + COLUMN_ID + " = " + diaryId;
+        String queryString = "UPDATE " + DIARY_TABLE + " SET " + COLUMN_WEATHER + " = " + eWeather + ", " + COLUMN_DIARY_CONTENT  +"= " + eNotes +  " WHERE " + COLUMN_ID + " = " + diaryId;
 
         Cursor cursor = db.rawQuery(queryString, null);
 

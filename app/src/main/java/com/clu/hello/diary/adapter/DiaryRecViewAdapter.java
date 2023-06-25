@@ -1,6 +1,5 @@
 package com.clu.hello.diary.adapter;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
@@ -19,9 +18,7 @@ import androidx.transition.TransitionManager;
 
 import com.clu.hello.diary.R;
 import com.clu.hello.diary.activity.EditActivity;
-import com.clu.hello.diary.activity.MainActivity;
-import com.clu.hello.diary.activity.ViewAllActivity;
-import com.clu.hello.diary.db.DatabaseHelper;
+import com.clu.hello.diary.db.DiaryDbHelper;
 import com.clu.hello.diary.util.Utils;
 import com.clu.hello.diary.vo.Diary;
 
@@ -50,6 +47,7 @@ public class DiaryRecViewAdapter extends RecyclerView.Adapter<DiaryRecViewAdapte
 
     public void setDiaries(ArrayList<Diary> diaries) {
         this.diaries = diaries;
+        notifyDataSetChanged();
     }
 
     public ArrayList<Diary> getDiaries() {
@@ -135,7 +133,7 @@ public class DiaryRecViewAdapter extends RecyclerView.Adapter<DiaryRecViewAdapte
                 @Override
                 public void onClick(View view) {
                     Diary diary = diaries.get(getAdapterPosition());
-                    DatabaseHelper databaseHelper = new DatabaseHelper(mContext);
+                    DiaryDbHelper databaseHelper = new DiaryDbHelper(mContext);
                     boolean success = databaseHelper.deleteOne(diary.getId());
                     diaries.remove(diary);
                     notifyDataSetChanged();
